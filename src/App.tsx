@@ -1,14 +1,69 @@
 import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Github, Linkedin, Mail, Phone, MapPin, Download, MessageCircle, Send, User, Briefcase, GraduationCap, Code, Award, ExternalLink } from 'lucide-react';
+import { ThreeHero } from './components/ThreeHero';
+import { AnimatedBackground } from './components/AnimatedBackground';
+import { ScrollAnimation, StaggeredAnimation } from './components/ScrollAnimations';
+import { InteractiveProjectCard } from './components/InteractiveProjectCard';
+import { KineticTypography, TypewriterEffect } from './components/KineticTypography';
+import { PerformanceOptimizedImage } from './components/PerformanceOptimizedImage';
 
 const App = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [theme, setTheme] = useState<'dark' | 'light' | 'auto'>('dark');
+  const [isLoading, setIsLoading] = useState(true);
   const [chatMessages, setChatMessages] = useState([
     { type: 'bot', message: 'Hi! I\'m Priyam\'s AI assistant. Ask me anything about his experience, skills, or projects!' }
   ]);
   const [currentMessage, setCurrentMessage] = useState('');
+
+  // Loading effect
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Enhanced projects data
+  const projects = [
+    {
+      title: 'NTS International Trade Platform',
+      description: 'Led API integration across 10+ countries for international trade applications with real-time data exchange and 99.9% uptime.',
+      longDescription: 'Comprehensive trade platform enabling seamless cross-border transactions through advanced API integration, microservices architecture, and real-time data synchronization across multiple international markets.',
+      technologies: ['REST APIs', 'Spring Boot', 'OAuth2', 'Microservices', 'TLS Encryption'],
+      metrics: [
+        { label: 'Countries', value: '10+' },
+        { label: 'Uptime', value: '99.9%' },
+        { label: 'API Endpoints', value: '10+' },
+        { label: 'Performance Boost', value: '30%' }
+      ]
+    },
+    {
+      title: 'AI Chat Bot',
+      description: 'Engineered an end-to-end chatbot system using NLP and ML, achieving 95%+ response accuracy with advanced preprocessing and entity recognition.',
+      longDescription: 'Advanced conversational AI system built with natural language processing and machine learning algorithms, featuring context awareness, entity recognition, and continuous learning capabilities.',
+      technologies: ['NLP', 'Machine Learning', 'Python', 'TensorFlow', 'Entity Recognition'],
+      metrics: [
+        { label: 'Accuracy', value: '95%+' },
+        { label: 'Response Time', value: '<200ms' },
+        { label: 'False Positives', value: '-30%' },
+        { label: 'Resolution Rate', value: '+20%' }
+      ]
+    },
+    {
+      title: 'Payload Dropping VTOL',
+      description: 'Designed a UAV with 227mm rotor diameter, optimizing structural integrity to increase payload capacity by 40% while maintaining flight balance.',
+      longDescription: 'Innovative vertical takeoff and landing aircraft design featuring autonomous targeting systems, advanced flight control algorithms, and precision payload delivery mechanisms.',
+      technologies: ['UAV Design', 'SIFT Algorithm', 'Autonomous Systems', 'Flight Control', 'Computer Vision'],
+      metrics: [
+        { label: 'Payload Increase', value: '40%' },
+        { label: 'Accuracy', value: '90%+' },
+        { label: 'Rotor Diameter', value: '227mm' },
+        { label: 'Max Payload', value: '200g' }
+      ]
+    }
+  ];
 
   useEffect(() => {
     const handleScroll = () => {
