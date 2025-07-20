@@ -8,6 +8,14 @@ import { InteractiveProjectCard } from './components/InteractiveProjectCard';
 import { KineticTypography, TypewriterEffect } from './components/KineticTypography';
 import { PerformanceOptimizedImage } from './components/PerformanceOptimizedImage';
 
+const App = () => {
+  const [activeSection, setActiveSection] = useState('home');
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [theme, setTheme] = useState('dark');
+  const [resolvedTheme, setResolvedTheme] = useState('dark');
+
   useEffect(() => {
     const handleScroll = () => {
       const sections = ['home', 'about', 'experience', 'skills', 'projects', 'contact'];
@@ -804,7 +812,11 @@ import { PerformanceOptimizedImage } from './components/PerformanceOptimizedImag
   );
 };
 
-const App = () => {
+const AppContent = () => {
+  return <App />;
+};
+
+const AppWrapper = () => {
   return (
     <HelmetProvider>
       <ThemeProvider>
@@ -814,4 +826,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default AppWrapper;
