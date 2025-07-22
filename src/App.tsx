@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { 
   Menu, X, Linkedin, Mail, Phone, MapPin, MessageCircle, Send, 
   User, Briefcase, GraduationCap, Code, Award, ExternalLink, 
@@ -7,12 +9,40 @@ import {
   Settings, Zap, CheckCircle, Play, ChevronRight, Star,
   Globe, Cpu, BarChart3, Shield, Rocket, Brain
 } from 'lucide-react';
+import { ThreeHero } from './components/ThreeHero';
+import { AnimatedBackground } from './components/AnimatedBackground';
+import { GSAPScrollAnimation, GSAPStaggerAnimation, GSAPParallax } from './components/GSAPAnimations';
+import { KineticTypography, TypewriterEffect, MorphingText, GlitchText } from './components/KineticTypography';
+import { InteractiveButton, RippleButton, MorphButton, ParticleButton } from './components/InteractiveButtons';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const App = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
 
   useEffect(() => {
+    // Initialize GSAP animations
+    gsap.fromTo('.hero-title', 
+      { opacity: 0, y: 100, scale: 0.8 },
+      { opacity: 1, y: 0, scale: 1, duration: 1.5, ease: "power3.out", delay: 0.5 }
+    );
+
+    gsap.fromTo('.hero-subtitle',
+      { opacity: 0, y: 50 },
+      { opacity: 1, y: 0, duration: 1, ease: "power2.out", delay: 1 }
+    );
+
+    gsap.fromTo('.hero-description',
+      { opacity: 0, y: 30 },
+      { opacity: 1, y: 0, duration: 1, ease: "power2.out", delay: 1.3 }
+    );
+
+    gsap.fromTo('.hero-buttons',
+      { opacity: 0, y: 30 },
+      { opacity: 1, y: 0, duration: 1, ease: "power2.out", delay: 1.6 }
+    );
+
     const handleScroll = () => {
       const sections = ['home', 'about', 'experience', 'skills', 'projects', 'certifications', 'contact'];
       const scrollPosition = window.scrollY + 100;
@@ -206,11 +236,8 @@ const App = () => {
 
   return (
     <div className="min-h-screen bg-slate-900 text-white relative overflow-x-hidden">
-      {/* Animated Background */}
-      <div className="fixed inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-900/20 to-purple-900/20" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.1),transparent_50%)]" />
-      </div>
+      {/* Advanced Animated Background */}
+      <AnimatedBackground />
       
       {/* Navigation */}
       <motion.nav
@@ -303,60 +330,55 @@ const App = () => {
 
       {/* Hero Section */}
       <section id="home" className="min-h-screen flex items-center justify-center relative pt-16">
+        {/* 3D Hero Background */}
+        <ThreeHero />
+        
         <div className="relative z-10 text-center max-w-4xl mx-auto px-4">
-          <motion.h1
-            className="text-5xl md:text-7xl font-bold mb-6"
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
+          <h1
+            className="hero-title text-5xl md:text-7xl font-bold mb-6"
           >
-            <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-              Priyam Bansal
+            <MorphingText 
+              text="Priyam Bansal"
+              className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent"
+            />
+          </h1>
+
+          <div
+            className="hero-subtitle text-2xl md:text-3xl text-gray-300 mb-8"
+          >
+            <span className="font-semibold">
+              <KineticTypography 
+                words={['Product Manager', 'API Integration Expert', 'Data Analysis Specialist', 'Strategic Problem Solver']}
+                className="text-2xl md:text-3xl"
+              />
             </span>
-          </motion.h1>
+          </div>
 
-          <motion.div
-            className="text-2xl md:text-3xl text-gray-300 mb-8"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.5 }}
+          <p
+            className="hero-description text-lg text-gray-400 mb-12 max-w-2xl mx-auto leading-relaxed"
           >
-            <span className="font-semibold">Product Manager</span>
-          </motion.div>
+            <TypewriterEffect 
+              text="Driving innovation through data-driven solutions and strategic problem-solving. Specializing in API integration, product lifecycle management, and cross-functional leadership."
+              delay={2000}
+              speed={30}
+            />
+          </p>
 
-          <motion.p
-            className="text-lg text-gray-400 mb-12 max-w-2xl mx-auto leading-relaxed"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
+          <div
+            className="hero-buttons flex flex-col sm:flex-row gap-4 justify-center"
           >
-            Driving innovation through data-driven solutions and strategic problem-solving. 
-            Specializing in API integration, product lifecycle management, and cross-functional leadership.
-          </motion.p>
-
-          <motion.div
-            className="flex flex-col sm:flex-row gap-4 justify-center"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.1 }}
-          >
-            <motion.button
+            <InteractiveButton
+              variant="magnetic"
               onClick={() => scrollToSection('projects')}
-              className="px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl"
-              whileHover={{ scale: 1.05, boxShadow: '0 20px 40px rgba(59, 130, 246, 0.4)' }}
-              whileTap={{ scale: 0.95 }}
             >
               View My Work
-            </motion.button>
-            <motion.button
+            </InteractiveButton>
+            <RippleButton
               onClick={() => scrollToSection('contact')}
-              className="px-8 py-4 border-2 border-purple-500 text-purple-400 rounded-lg font-semibold hover:bg-purple-500 hover:text-white transition-all duration-300"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
             >
               Get In Touch
-            </motion.button>
-          </motion.div>
+            </RippleButton>
+          </div>
         </div>
       </section>
 
@@ -794,149 +816,138 @@ const App = () => {
       {/* Contact Section */}
       <section id="contact" className="py-20 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.h2
-            className="text-4xl md:text-5xl font-bold text-center mb-16"
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-          >
-            <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-              Get In Touch
-            </span>
-          </motion.h2>
+          <GSAPScrollAnimation animation="scaleIn">
+            <h2 className="text-4xl md:text-5xl font-bold text-center mb-16">
+              <GlitchText 
+                text="Get In Touch"
+                className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent"
+              />
+            </h2>
+          </GSAPScrollAnimation>
 
           <div className="grid lg:grid-cols-2 gap-12">
-            <motion.div
-              className="space-y-8"
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-            >
-              <div>
-                <h3 className="text-2xl font-bold text-white mb-4">Let's Connect</h3>
-                <p className="text-gray-300 leading-relaxed">
-                  I'm always interested in discussing new opportunities, innovative projects, 
-                  and potential collaborations. Whether you're looking for a product manager, 
-                  need consultation on API integration, or want to explore data-driven solutions, 
-                  I'd love to hear from you.
-                </p>
+            <GSAPScrollAnimation animation="fadeInLeft">
+              <div className="space-y-8">
+                <div>
+                  <h3 className="text-2xl font-bold text-white mb-4">
+                    <MorphingText text="Let's Connect" />
+                  </h3>
+                  <p className="text-gray-300 leading-relaxed">
+                    I'm always interested in discussing new opportunities, innovative projects, 
+                    and potential collaborations. Whether you're looking for a product manager, 
+                    need consultation on API integration, or want to explore data-driven solutions, 
+                    I'd love to hear from you.
+                  </p>
+                </div>
+
+                <GSAPStaggerAnimation stagger={0.1}>
+                  <div className="space-y-4">
+                    <motion.a
+                      href="mailto:priyam_b@ch.iitr.ac.in"
+                      className="flex items-center gap-4 p-4 bg-slate-800/50 rounded-lg hover:bg-slate-700/50 transition-colors group"
+                      whileHover={{ scale: 1.02, x: 10, rotateY: 5 }}
+                    >
+                      <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center group-hover:bg-blue-500 transition-colors">
+                        <Mail className="text-white" size={20} />
+                      </div>
+                      <div>
+                        <div className="text-white font-semibold">Email</div>
+                        <div className="text-gray-400">priyam_b@ch.iitr.ac.in</div>
+                      </div>
+                    </motion.a>
+
+                    <motion.a
+                      href="tel:+919588526725"
+                      className="flex items-center gap-4 p-4 bg-slate-800/50 rounded-lg hover:bg-slate-700/50 transition-colors group"
+                      whileHover={{ scale: 1.02, x: 10, rotateY: -5 }}
+                    >
+                      <div className="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center group-hover:bg-green-500 transition-colors">
+                        <Phone className="text-white" size={20} />
+                      </div>
+                      <div>
+                        <div className="text-white font-semibold">Phone</div>
+                        <div className="text-gray-400">+91 9588526725</div>
+                      </div>
+                    </motion.a>
+
+                    <motion.a
+                      href="https://www.linkedin.com/in/priyambansal/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-4 p-4 bg-slate-800/50 rounded-lg hover:bg-slate-700/50 transition-colors group"
+                      whileHover={{ scale: 1.02, x: 10, rotateY: 5 }}
+                    >
+                      <div className="w-12 h-12 bg-blue-700 rounded-lg flex items-center justify-center group-hover:bg-blue-600 transition-colors">
+                        <Linkedin className="text-white" size={20} />
+                      </div>
+                      <div>
+                        <div className="text-white font-semibold">LinkedIn</div>
+                        <div className="text-gray-400">linkedin.com/in/priyambansal</div>
+                      </div>
+                    </motion.a>
+
+                    <motion.div
+                      className="flex items-center gap-4 p-4 bg-slate-800/50 rounded-lg"
+                      whileHover={{ scale: 1.02, rotateY: -5 }}
+                    >
+                      <div className="w-12 h-12 bg-purple-600 rounded-lg flex items-center justify-center">
+                        <MapPin className="text-white" size={20} />
+                      </div>
+                      <div>
+                        <div className="text-white font-semibold">Location</div>
+                        <div className="text-gray-400">Mumbai, India</div>
+                      </div>
+                    </motion.div>
+                  </div>
+                </GSAPStaggerAnimation>
               </div>
+            </GSAPScrollAnimation>
 
-              <div className="space-y-4">
-                <motion.a
-                  href="mailto:priyam_b@ch.iitr.ac.in"
-                  className="flex items-center gap-4 p-4 bg-slate-800/50 rounded-lg hover:bg-slate-700/50 transition-colors group"
-                  whileHover={{ scale: 1.02, x: 10 }}
-                >
-                  <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center group-hover:bg-blue-500 transition-colors">
-                    <Mail className="text-white" size={20} />
+            <GSAPScrollAnimation animation="fadeInRight">
+              <div className="bg-slate-800/50 backdrop-blur-sm rounded-2xl p-8 border border-purple-500/20">
+                <h3 className="text-xl font-bold text-white mb-6">
+                  <MorphingText text="Send a Message" />
+                </h3>
+                <form className="space-y-6">
+                  <div>
+                    <label className="block text-gray-300 mb-2">Name</label>
+                    <motion.input
+                      type="text"
+                      className="w-full px-4 py-3 bg-slate-700/50 border border-gray-600 rounded-lg focus:border-blue-400 focus:outline-none text-white transition-colors"
+                      whileFocus={{ scale: 1.02, borderColor: '#3B82F6' }}
+                    />
                   </div>
                   <div>
-                    <div className="text-white font-semibold">Email</div>
-                    <div className="text-gray-400">priyam_b@ch.iitr.ac.in</div>
-                  </div>
-                </motion.a>
-
-                <motion.a
-                  href="tel:+919588526725"
-                  className="flex items-center gap-4 p-4 bg-slate-800/50 rounded-lg hover:bg-slate-700/50 transition-colors group"
-                  whileHover={{ scale: 1.02, x: 10 }}
-                >
-                  <div className="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center group-hover:bg-green-500 transition-colors">
-                    <Phone className="text-white" size={20} />
+                    <label className="block text-gray-300 mb-2">Email</label>
+                    <motion.input
+                      type="email"
+                      className="w-full px-4 py-3 bg-slate-700/50 border border-gray-600 rounded-lg focus:border-blue-400 focus:outline-none text-white transition-colors"
+                      whileFocus={{ scale: 1.02, borderColor: '#3B82F6' }}
+                    />
                   </div>
                   <div>
-                    <div className="text-white font-semibold">Phone</div>
-                    <div className="text-gray-400">+91 9588526725</div>
-                  </div>
-                </motion.a>
-
-                <motion.a
-                  href="https://www.linkedin.com/in/priyambansal/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-4 p-4 bg-slate-800/50 rounded-lg hover:bg-slate-700/50 transition-colors group"
-                  whileHover={{ scale: 1.02, x: 10 }}
-                >
-                  <div className="w-12 h-12 bg-blue-700 rounded-lg flex items-center justify-center group-hover:bg-blue-600 transition-colors">
-                    <Linkedin className="text-white" size={20} />
+                    <label className="block text-gray-300 mb-2">Subject</label>
+                    <motion.input
+                      type="text"
+                      className="w-full px-4 py-3 bg-slate-700/50 border border-gray-600 rounded-lg focus:border-blue-400 focus:outline-none text-white transition-colors"
+                      whileFocus={{ scale: 1.02, borderColor: '#3B82F6' }}
+                    />
                   </div>
                   <div>
-                    <div className="text-white font-semibold">LinkedIn</div>
-                    <div className="text-gray-400">linkedin.com/in/priyambansal</div>
+                    <label className="block text-gray-300 mb-2">Message</label>
+                    <motion.textarea
+                      rows={4}
+                      className="w-full px-4 py-3 bg-slate-700/50 border border-gray-600 rounded-lg focus:border-blue-400 focus:outline-none text-white transition-colors resize-none"
+                      whileFocus={{ scale: 1.02, borderColor: '#3B82F6' }}
+                    />
                   </div>
-                </motion.a>
-
-                <motion.div
-                  className="flex items-center gap-4 p-4 bg-slate-800/50 rounded-lg"
-                  whileHover={{ scale: 1.02 }}
-                >
-                  <div className="w-12 h-12 bg-purple-600 rounded-lg flex items-center justify-center">
-                    <MapPin className="text-white" size={20} />
-                  </div>
-                  <div>
-                    <div className="text-white font-semibold">Location</div>
-                    <div className="text-gray-400">Mumbai, India</div>
-                  </div>
-                </motion.div>
+                  <ParticleButton className="w-full flex items-center justify-center gap-2">
+                    <Send size={20} />
+                    Send Message
+                  </ParticleButton>
+                </form>
               </div>
-            </motion.div>
-
-            <motion.div
-              className="bg-slate-800/50 backdrop-blur-sm rounded-2xl p-8 border border-purple-500/20"
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-              whileHover={{ scale: 1.02 }}
-            >
-              <h3 className="text-xl font-bold text-white mb-6">Send a Message</h3>
-              <form className="space-y-6">
-                <div>
-                  <label className="block text-gray-300 mb-2">Name</label>
-                  <motion.input
-                    type="text"
-                    className="w-full px-4 py-3 bg-slate-700/50 border border-gray-600 rounded-lg focus:border-blue-400 focus:outline-none text-white transition-colors"
-                    whileFocus={{ scale: 1.02 }}
-                  />
-                </div>
-                <div>
-                  <label className="block text-gray-300 mb-2">Email</label>
-                  <motion.input
-                    type="email"
-                    className="w-full px-4 py-3 bg-slate-700/50 border border-gray-600 rounded-lg focus:border-blue-400 focus:outline-none text-white transition-colors"
-                    whileFocus={{ scale: 1.02 }}
-                  />
-                </div>
-                <div>
-                  <label className="block text-gray-300 mb-2">Subject</label>
-                  <motion.input
-                    type="text"
-                    className="w-full px-4 py-3 bg-slate-700/50 border border-gray-600 rounded-lg focus:border-blue-400 focus:outline-none text-white transition-colors"
-                    whileFocus={{ scale: 1.02 }}
-                  />
-                </div>
-                <div>
-                  <label className="block text-gray-300 mb-2">Message</label>
-                  <motion.textarea
-                    rows={4}
-                    className="w-full px-4 py-3 bg-slate-700/50 border border-gray-600 rounded-lg focus:border-blue-400 focus:outline-none text-white transition-colors resize-none"
-                    whileFocus={{ scale: 1.02 }}
-                  />
-                </div>
-                <motion.button
-                  type="submit"
-                  className="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 flex items-center justify-center gap-2"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <Send size={20} />
-                  Send Message
-                </motion.button>
-              </form>
-            </motion.div>
+            </GSAPScrollAnimation>
           </div>
         </div>
       </section>
