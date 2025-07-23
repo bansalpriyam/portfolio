@@ -22,6 +22,7 @@ gsap.registerPlugin(ScrollTrigger);
 const App = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
+  const sectionsRef = useRef<{ [key: string]: HTMLElement | null }>({});
 
   useEffect(() => {
     // Initialize GSAP animations
@@ -45,20 +46,76 @@ const App = () => {
       { opacity: 1, y: 0, duration: 1, ease: "power2.out", delay: 1.6 }
     );
 
-    // Use Intersection Observer for more accurate section detection
+    // Store section references
+    const sections = ['home', 'about', 'experience', 'skills', 'projects', 'certifications', 'contact'];
+    sections.forEach(sectionId => {
+      sectionsRef.current[sectionId] = document.getElementById(sectionId);
+    });
+
+    // Scroll handler for section detection
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY + 100; // Offset for header
+      
+      // Find the current section
+      let currentSection = 'home';
+      
+      sections.forEach(sectionId => {
+        const element = sectionsRef.current[sectionId];
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          const elementTop = window.scrollY + rect.top;
+          
+          if (scrollPosition >= elementTop - 200) {
+            currentSection = sectionId;
+          }
+        }
+      });
+      
+      setActiveSection(currentSection);
+    };
+
+    // Add scroll listener
+    window.addEventListener('scroll', handleScroll);
+    
+    // Set initial section
+    handleScroll();
+
+    // Cleanup
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  // Additional useEffect for debugging and ensuring proper updates
+  useEffect(() => {
+    console.log('Active section changed to:', activeSection);
+  }, [activeSection]);
+
+  // Alternative intersection observer approach as backup
+  useEffect(() => {
     const observerOptions = {
       root: null,
-      rootMargin: '-20% 0px -60% 0px', // Trigger when section is 20% from top
-      threshold: 0
+      rootMargin: '-10% 0px -70% 0px',
+      threshold: [0, 0.1, 0.5, 1]
     };
 
     const observerCallback = (entries) => {
+      // Find the entry with the highest intersection ratio
+      let maxRatio = 0;
+      let activeEntry = null;
+      
       entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const sectionId = entry.target.id;
-          setActiveSection(sectionId);
+        if (entry.isIntersecting && entry.intersectionRatio > maxRatio) {
+          maxRatio = entry.intersectionRatio;
+          activeEntry = entry;
         }
       });
+      
+      if (activeEntry) {
+        const sectionId = activeEntry.target.id;
+        console.log('Intersection Observer detected:', sectionId);
+        setActiveSection(sectionId);
+      }
     };
 
     const observer = new IntersectionObserver(observerCallback, observerOptions);
@@ -343,7 +400,7 @@ const App = () => {
       </motion.nav>
 
       {/* Hero Section */}
-      <section id="home" className="min-h-screen flex items-center justify-center relative pt-16">
+      <section id="home" className="min-h-screen flex items-center justify-center relative pt-16" data-section="home">
         {/* 3D Hero Background */}
         <ThreeHero />
         
@@ -397,7 +454,7 @@ const App = () => {
       </section>
 
       {/* About Section */}
-      <section id="about" className="py-20 relative">
+      <section id="about" className="py-20 relative" data-section="about">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.h2
             className="text-4xl md:text-5xl font-bold text-center mb-16"
@@ -483,7 +540,7 @@ const App = () => {
       </section>
 
       {/* Experience Section */}
-      <section id="experience" className="py-20 relative">
+      <section id="experience" className="py-20 relative" data-section="experience">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.h2
             className="text-4xl md:text-5xl font-bold text-center mb-16"
@@ -628,7 +685,7 @@ const App = () => {
       </section>
 
       {/* Skills Section */}
-      <section id="skills" className="py-20 relative">
+      <section id="skills" className="py-20 relative" data-section="skills">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.h2
             className="text-4xl md:text-5xl font-bold text-center mb-16"
@@ -683,7 +740,7 @@ const App = () => {
       </section>
 
       {/* Projects Section */}
-      <section id="projects" className="py-20 relative">
+      <section id="projects" className="py-20 relative" data-section="projects">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.h2
             className="text-4xl md:text-5xl font-bold text-center mb-16"
@@ -702,7 +759,7 @@ const App = () => {
       </section>
 
       {/* Certifications Section */}
-      <section id="certifications" className="py-20 relative">
+      <section id="certifications" className="py-20 relative" data-section="certifications">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.h2
             className="text-4xl md:text-5xl font-bold text-center mb-16"
@@ -777,7 +834,7 @@ const App = () => {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-20 relative">
+      <section id="contact" className="py-20 relative" data-section="contact">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <GSAPScrollAnimation animation="scaleIn">
             <h2 className="text-4xl md:text-5xl font-bold text-center mb-16">
