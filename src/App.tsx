@@ -47,7 +47,7 @@ const App = () => {
 
     const handleScroll = () => {
       const sections = ['home', 'about', 'experience', 'skills', 'projects', 'certifications', 'contact'];
-      const scrollPosition = window.scrollY + 100;
+      const scrollPosition = window.scrollY + window.innerHeight / 2;
 
       for (const section of sections) {
         const element = document.getElementById(section);
@@ -60,6 +60,9 @@ const App = () => {
         }
       }
     };
+
+    // Set initial active section
+    handleScroll();
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
