@@ -45,27 +45,36 @@ const App = () => {
       { opacity: 1, y: 0, duration: 1, ease: "power2.out", delay: 1.6 }
     );
 
-    const handleScroll = () => {
-      const sections = ['home', 'about', 'experience', 'skills', 'projects', 'certifications', 'contact'];
-      const scrollPosition = window.scrollY + window.innerHeight / 2;
-
-      for (const section of sections) {
-        const element = document.getElementById(section);
-        if (element) {
-          const { offsetTop, offsetHeight } = element;
-          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
-            setActiveSection(section);
-            break;
-          }
-        }
-      }
+    // Use Intersection Observer for more accurate section detection
+    const observerOptions = {
+      root: null,
+      rootMargin: '-20% 0px -60% 0px', // Trigger when section is 20% from top
+      threshold: 0
     };
 
-    // Set initial active section
-    handleScroll();
+    const observerCallback = (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const sectionId = entry.target.id;
+          setActiveSection(sectionId);
+        }
+      });
+    };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+    // Observe all sections
+    const sections = ['home', 'about', 'experience', 'skills', 'projects', 'certifications', 'contact'];
+    sections.forEach((sectionId) => {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        observer.observe(element);
+      }
+    });
+
+    return () => {
+      observer.disconnect();
+    };
   }, []);
 
   const scrollToSection = (sectionId: string) => {
