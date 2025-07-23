@@ -15,6 +15,7 @@ import { GSAPScrollAnimation, GSAPStaggerAnimation, GSAPParallax } from './compo
 import { KineticTypography, TypewriterEffect, MorphingText, GlitchText } from './components/KineticTypography';
 import { InteractiveButton, RippleButton, MorphButton, ParticleButton } from './components/InteractiveButtons';
 import { ProjectsGrid } from './components/ProjectsGrid';
+import { ContactForm } from './components/ContactForm';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -854,49 +855,7 @@ const App = () => {
             </GSAPScrollAnimation>
 
             <GSAPScrollAnimation animation="fadeInRight">
-              <div className="bg-slate-800/50 backdrop-blur-sm rounded-2xl p-8 border border-purple-500/20">
-                <h3 className="text-xl font-bold text-white mb-6">
-                  <MorphingText text="Send a Message" />
-                </h3>
-                <form className="space-y-6">
-                  <div>
-                    <label className="block text-gray-300 mb-2">Name</label>
-                    <motion.input
-                      type="text"
-                      className="w-full px-4 py-3 bg-slate-700/50 border border-gray-600 rounded-lg focus:border-blue-400 focus:outline-none text-white transition-colors"
-                      whileFocus={{ scale: 1.02, borderColor: '#3B82F6' }}
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-gray-300 mb-2">Email</label>
-                    <motion.input
-                      type="email"
-                      className="w-full px-4 py-3 bg-slate-700/50 border border-gray-600 rounded-lg focus:border-blue-400 focus:outline-none text-white transition-colors"
-                      whileFocus={{ scale: 1.02, borderColor: '#3B82F6' }}
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-gray-300 mb-2">Subject</label>
-                    <motion.input
-                      type="text"
-                      className="w-full px-4 py-3 bg-slate-700/50 border border-gray-600 rounded-lg focus:border-blue-400 focus:outline-none text-white transition-colors"
-                      whileFocus={{ scale: 1.02, borderColor: '#3B82F6' }}
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-gray-300 mb-2">Message</label>
-                    <motion.textarea
-                      rows={4}
-                      className="w-full px-4 py-3 bg-slate-700/50 border border-gray-600 rounded-lg focus:border-blue-400 focus:outline-none text-white transition-colors resize-none"
-                      whileFocus={{ scale: 1.02, borderColor: '#3B82F6' }}
-                    />
-                  </div>
-                  <ParticleButton className="w-full flex items-center justify-center gap-2">
-                    <Send size={20} />
-                    Send Message
-                  </ParticleButton>
-                </form>
-              </div>
+              <ContactForm />
             </GSAPScrollAnimation>
           </div>
         </div>
