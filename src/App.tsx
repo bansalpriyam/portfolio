@@ -404,7 +404,7 @@ const App = () => {
         {/* 3D Hero Background */}
         <ThreeHero />
         
-        <div className="relative z-10 text-center max-w-4xl mx-auto px-4">
+        <div className="relative z-10 text-center max-w-6xl mx-auto px-4">
           <h1
             className="hero-title text-5xl md:text-7xl font-bold mb-6"
           >
@@ -450,11 +450,114 @@ const App = () => {
               Get In Touch
             </RippleButton>
           </div>
+
+          {/* Featured Projects Preview - Immediately visible */}
+          <motion.div
+            className="hero-projects mt-20"
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 2 }}
+          >
+            <h3 className="text-2xl font-bold text-white mb-8">Featured Work</h3>
+            <div className="grid md:grid-cols-3 gap-6">
+              {projects.slice(0, 3).map((project, index) => (
+                <motion.div
+                  key={project.id}
+                  className="group relative bg-slate-800/30 backdrop-blur-sm rounded-xl overflow-hidden border border-purple-500/20 hover:border-purple-500/40 transition-all duration-500 cursor-pointer"
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 2.2 + index * 0.1 }}
+                  whileHover={{ 
+                    scale: 1.05, 
+                    y: -10,
+                    boxShadow: '0 20px 40px rgba(139, 92, 246, 0.3)'
+                  }}
+                  onClick={() => scrollToSection('projects')}
+                >
+                  {/* Project Image */}
+                  <div className="relative h-40 overflow-hidden">
+                    <motion.img
+                      src={project.image}
+                      alt={project.title}
+                      className="w-full h-full object-cover"
+                      whileHover={{ scale: 1.1 }}
+                      transition={{ duration: 0.3 }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent" />
+                    
+                    {/* Hover Overlay with Details */}
+                    <motion.div
+                      className="absolute inset-0 bg-slate-900/90 backdrop-blur-sm flex flex-col justify-center items-center p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                      initial={{ opacity: 0 }}
+                      whileHover={{ opacity: 1 }}
+                    >
+                      <div className="text-center">
+                        <h4 className="text-lg font-bold text-white mb-2">{project.title}</h4>
+                        <p className="text-gray-300 text-sm mb-3 line-clamp-2">{project.description}</p>
+                        <div className="flex flex-wrap gap-1 justify-center mb-3">
+                          {project.technologies.slice(0, 3).map((tech) => (
+                            <span
+                              key={tech}
+                              className="px-2 py-1 bg-blue-500/20 text-blue-400 rounded text-xs"
+                            >
+                              {tech}
+                            </span>
+                          ))}
+                        </div>
+                        <div className="grid grid-cols-2 gap-2 text-xs">
+                          {project.metrics.slice(0, 2).map((metric, metricIndex) => (
+                            <div key={metricIndex} className="text-center">
+                              <div className="font-bold text-blue-400">{metric.value}</div>
+                              <div className="text-gray-400">{metric.label}</div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </motion.div>
+                  </div>
+
+                  {/* Project Title - Always Visible */}
+                  <div className="p-4">
+                    <h4 className="text-white font-semibold group-hover:text-blue-400 transition-colors">
+                      {project.title}
+                    </h4>
+                    <p className="text-gray-400 text-sm mt-1 line-clamp-1">
+                      {project.description}
+                    </p>
+                  </div>
+
+                  {/* Subtle Animation Indicator */}
+                  <motion.div
+                    className="absolute top-3 right-3 w-8 h-8 bg-blue-600/80 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    whileHover={{ scale: 1.1, rotate: 90 }}
+                  >
+                    <ChevronRight size={16} className="text-white" />
+                  </motion.div>
+                </motion.div>
+              ))}
+            </div>
+            
+            {/* View All Projects Button */}
+            <motion.div
+              className="mt-8"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 2.8 }}
+            >
+              <InteractiveButton
+                variant="secondary"
+                onClick={() => scrollToSection('projects')}
+                className="mx-auto"
+              >
+                View All Projects <ChevronRight size={16} className="ml-2" />
+              </InteractiveButton>
+            </motion.div>
+          </motion.div>
         </div>
       </section>
 
       {/* About Section */}
-      <section id="about" className="py-20 relative" data-section="about">
+      <section id="about" className="py-20 relative bg-slate-900/50" data-section="about">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.h2
             className="text-4xl md:text-5xl font-bold text-center mb-16"
@@ -502,38 +605,66 @@ const App = () => {
               transition={{ duration: 0.6 }}
               viewport={{ once: true }}
             >
-              <div className="relative z-10 bg-gradient-to-br from-blue-600/20 to-purple-600/20 rounded-2xl p-8 backdrop-blur-sm border border-purple-500/20">
+              <motion.div 
+                className="relative z-10 bg-gradient-to-br from-blue-600/20 to-purple-600/20 rounded-2xl p-8 backdrop-blur-sm border border-purple-500/20"
+                whileHover={{ scale: 1.02, borderColor: 'rgba(139, 92, 246, 0.4)' }}
+                transition={{ duration: 0.3 }}
+              >
                 <div className="grid grid-cols-2 gap-6">
                   <motion.div
                     className="text-center"
-                    whileHover={{ scale: 1.1 }}
+                    whileHover={{ scale: 1.1, y: -5 }}
+                    transition={{ type: "spring", stiffness: 300 }}
                   >
-                    <div className="text-3xl font-bold text-blue-400 mb-2">10+</div>
+                    <motion.div 
+                      className="text-3xl font-bold text-blue-400 mb-2"
+                      whileHover={{ scale: 1.2 }}
+                    >
+                      10+
+                    </motion.div>
                     <div className="text-sm text-gray-400">Countries Integrated</div>
                   </motion.div>
                   <motion.div
                     className="text-center"
-                    whileHover={{ scale: 1.1 }}
+                    whileHover={{ scale: 1.1, y: -5 }}
+                    transition={{ type: "spring", stiffness: 300 }}
                   >
-                    <div className="text-3xl font-bold text-purple-400 mb-2">99.9%</div>
+                    <motion.div 
+                      className="text-3xl font-bold text-purple-400 mb-2"
+                      whileHover={{ scale: 1.2 }}
+                    >
+                      99.9%
+                    </motion.div>
                     <div className="text-sm text-gray-400">System Uptime</div>
                   </motion.div>
                   <motion.div
                     className="text-center"
-                    whileHover={{ scale: 1.1 }}
+                    whileHover={{ scale: 1.1, y: -5 }}
+                    transition={{ type: "spring", stiffness: 300 }}
                   >
-                    <div className="text-3xl font-bold text-green-400 mb-2">70%</div>
+                    <motion.div 
+                      className="text-3xl font-bold text-green-400 mb-2"
+                      whileHover={{ scale: 1.2 }}
+                    >
+                      70%
+                    </motion.div>
                     <div className="text-sm text-gray-400">Performance Improvement</div>
                   </motion.div>
                   <motion.div
                     className="text-center"
-                    whileHover={{ scale: 1.1 }}
+                    whileHover={{ scale: 1.1, y: -5 }}
+                    transition={{ type: "spring", stiffness: 300 }}
                   >
-                    <div className="text-3xl font-bold text-yellow-400 mb-2">50K+</div>
+                    <motion.div 
+                      className="text-3xl font-bold text-yellow-400 mb-2"
+                      whileHover={{ scale: 1.2 }}
+                    >
+                      50K+
+                    </motion.div>
                     <div className="text-sm text-gray-400">Records Analyzed</div>
                   </motion.div>
                 </div>
-              </div>
+              </motion.div>
             </motion.div>
           </div>
         </div>
@@ -740,7 +871,7 @@ const App = () => {
       </section>
 
       {/* Projects Section */}
-      <section id="projects" className="py-20 relative" data-section="projects">
+      <section id="projects" className="py-20 relative bg-slate-900" data-section="projects">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.h2
             className="text-4xl md:text-5xl font-bold text-center mb-16"
@@ -754,7 +885,36 @@ const App = () => {
             </span>
           </motion.h2>
 
+          <motion.p
+            className="text-center text-gray-400 mb-12 max-w-2xl mx-auto"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            viewport={{ once: true }}
+          >
+            Explore detailed case studies of my most impactful projects, showcasing technical expertise and business results.
+          </motion.p>
+
           <ProjectsGrid projects={projects} />
+
+          {/* Call to Action */}
+          <motion.div
+            className="text-center mt-16"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            viewport={{ once: true }}
+          >
+            <p className="text-gray-300 mb-6">
+              Interested in collaborating on similar projects?
+            </p>
+            <InteractiveButton
+              variant="primary"
+              onClick={() => scrollToSection('contact')}
+            >
+              Let's Work Together
+            </InteractiveButton>
+          </motion.div>
         </div>
       </section>
 
