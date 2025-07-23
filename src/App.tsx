@@ -14,6 +14,7 @@ import { AnimatedBackground } from './components/AnimatedBackground';
 import { GSAPScrollAnimation, GSAPStaggerAnimation, GSAPParallax } from './components/GSAPAnimations';
 import { KineticTypography, TypewriterEffect, MorphingText, GlitchText } from './components/KineticTypography';
 import { InteractiveButton, RippleButton, MorphButton, ParticleButton } from './components/InteractiveButtons';
+import { ProjectsGrid } from './components/ProjectsGrid';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -683,58 +684,7 @@ const App = () => {
             </span>
           </motion.h2>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {projects.map((project, index) => (
-              <motion.div
-                key={project.id}
-                className="bg-slate-800/50 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/20 hover:border-purple-500/40 transition-all duration-300 group cursor-pointer"
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                whileHover={{ scale: 1.02, y: -5 }}
-              >
-                <div className="relative h-48 mb-4 rounded-lg overflow-hidden">
-                  <img
-                    src={project.image}
-                    alt={project.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent" />
-                </div>
-
-                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-blue-400 transition-colors">
-                  {project.title}
-                </h3>
-                <p className="text-gray-300 mb-4 line-clamp-2">{project.description}</p>
-
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {project.technologies.slice(0, 3).map((tech) => (
-                    <span
-                      key={tech}
-                      className="px-2 py-1 bg-blue-500/20 text-blue-400 rounded text-sm"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                  {project.technologies.length > 3 && (
-                    <span className="px-2 py-1 bg-gray-500/20 text-gray-400 rounded text-sm">
-                      +{project.technologies.length - 3} more
-                    </span>
-                  )}
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  {project.metrics.slice(0, 2).map((metric, index) => (
-                    <div key={index} className="text-center">
-                      <div className="text-lg font-bold text-blue-400">{metric.value}</div>
-                      <div className="text-xs text-gray-400">{metric.label}</div>
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
-            ))}
-          </div>
+          <ProjectsGrid projects={projects} />
         </div>
       </section>
 
